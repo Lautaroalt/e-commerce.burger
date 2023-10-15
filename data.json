@@ -1,0 +1,58 @@
+{
+  "product": [
+    {
+      "id": 1,
+      "nombre": "Doble BBQ",
+      "imagen": "images/pi1.png",
+      "precio": "$3500"
+    },
+    {
+      "id": 2,
+      "nombre": "Doble Simple",
+      "imagen": "images/pi2.png",
+      "precio": "$2500"
+    },
+    {
+      "id": 3,
+      "nombre": "Simple Bacon",
+      "imagen": "images/pi3.png",
+      "precio": "$2900"
+    },
+    {
+      "id": 4,
+      "nombre": "Melt",
+      "imagen": "images/pi4.png",
+      "precio": "$3100"
+    },
+    {
+      "id": 5,
+      "nombre": "Doble Cheese",
+      "imagen": "images/pi5.png",
+      "precio": "$2900"
+    },
+    {
+      "id": 6,
+      "nombre": "Simple Cheese",
+      "imagen": "images/pi6.png",
+      "precio": "$2500"
+    },
+    {
+      "id": 7,
+      "nombre": "Burger Kids",
+      "imagen": "images/pi7.png",
+      "precio": "$1900"
+    },
+    {
+      "id": 8,
+      "nombre": "Chicken",
+      "imagen": "images/pi8.png",
+      "precio": "$2600"
+    },
+    {
+      "id": 9,
+      "nombre": "Mc Crispi",
+      "imagen": "images/pi9.png",
+      "precio": "$2700"
+    }
+  ]
+}
