@@ -20,9 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
 function cargarEventListeners() {
   elementos1.addEventListener('click', comprarElemento);
   elementos2.addEventListener('click', comprarElemento);
-  carrito.addEventListener('click', eliminarElemento);
   vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
   realizarPedidoBtn.addEventListener('click', realizarPedido);
+
+  carrito.addEventListener('click', (e) => {
+    if (e.target.classList.contains('borrar')) {
+      const productoId = e.target.getAttribute('data-id');
+      // Eliminar del DOM
+      e.target.parentElement.parentElement.remove();
+      // Eliminar del array productos
+      productos = productos.filter(producto => producto.id !== productoId);
+      // Actualizar localStorage
+      guardarProductosEnLocalStorage(productos);
+    }
+  });
 }
 
 function guardarProductosEnLocalStorage(productos) {
@@ -60,7 +71,7 @@ function realizarPedido() {
             timer: 2500,
             background: '#2d3413',
         });
-        guardarProductosEnLocalStorage(obtenerProductosDelCarrito());
+        vaciarCarrito(); // Vaciamos el carrito después de realizar el pedido
     }
 }
 
@@ -103,6 +114,7 @@ function insertarCarrito(elemento) {
     `;
     lista.appendChild(row);
 
+
     Swal.fire({
         title: 'Producto agregado al carrito',
         icon: 'success',
@@ -114,77 +126,45 @@ function insertarCarrito(elemento) {
             title: 'text-light',
         }
     });
+
+    guardarProductosEnLocalStorage(obtenerProductosDelCarrito());
+
+    const botonEliminar = row.querySelector('.borrar');
+    botonEliminar.addEventListener('click', eliminarElemento);
 }
 
 function eliminarElemento(e) {
     e.preventDefault();
     if (e.target.classList.contains('borrar')) {
+        const productoId = e.target.getAttribute('data-id');
+        // Eliminar del DOM
         e.target.parentElement.parentElement.remove();
+        // Eliminar del array productos
+        productos = productos.filter(producto => producto.id !== productoId);
+        // Actualizar localStorage
+        guardarProductosEnLocalStorage(productos);
     }
 }
 
 function vaciarCarrito() {
-    if (lista.firstChild) {
-        Swal.fire({
-            title: '¿Eliminar Productos?',
-            text: 'Esto eliminará todos los productos del carrito',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            background: '#2d3413',
-            iconColor: '#ca7d08',
-            customClass: {
-                title: 'text-light',
-                content: 'text-light',
-                confirmButton: 'bg-danger',
-                cancelButton: 'bg-primary'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                while (lista.firstChild) {
-                    lista.removeChild(lista.firstChild);
-                }
-                
-                Swal.fire({
-                    title: 'Carrito vaciado',
-                    text: 'Todos los productos han sido eliminados',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    background: '#2d3413',
-                    iconColor: '#ca7d08',
-                    customClass: {
-                        title: 'text-light',
-                    }
-                });
-            }
-        });
-    } else {
-        Swal.fire({
-            title: 'El carrito ya está vacío',
-            icon: 'info',
-            showConfirmButton: false,
-            timer: 1500,
-            background: '#2d3413',
-            iconColor: '#ca7d08',
-            customClass: {
-                title: 'text-light',
-            }
-        });
+    while (lista.firstChild) {
+        lista.removeChild(lista.firstChild);
     }
+    
+    Swal.fire({
+        title: 'Carrito vaciado',
+        text: 'Todos los productos han sido eliminados',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+        background: '#2d3413',
+        iconColor: '#ca7d08',
+        customClass: {
+            title: 'text-light',
+        }
+    });
 
-    return false;
+    // Limpiar productos del localStorage
+    localStorage.removeItem('productos');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('data.json')
-      .then(response => response.json())
-      .then(data => {
-        productos = data.product;
-        cargarEventListeners();
-        cargarProductosDesdeLocalStorage();
-      });
-});
